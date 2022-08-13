@@ -11,7 +11,7 @@ namespace AspNetCoreWebApplication.Entities
         public string? Description { get; set; }
         [Display(Name = "Kategori Resmi"), StringLength(50)]
         public string? Image { get; set; }
-        [Display(Name = "Eklenme Tarihi")]
+        [Display(Name = "Eklenme Tarihi"), ScaffoldColumn(false)]  // ScaffoldColumn(false) : sayfa oluştururken bu kolon oluşmasın
         public DateTime? CreateDate { get; set; } = DateTime.Now;
         public ICollection<Product> Products { get; set; }
         public Category()

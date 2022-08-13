@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Brand>
+﻿@model IEnumerable<Category>
 
 @{
-    ViewData["Title"] = "Markalar";
+    ViewData["Title"] = "Kategoriler";
 }
 
-<h1>Markalar</h1>
+<h1>Kategoriler</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-outline-primary">Yeni Ekle</a>
@@ -19,7 +19,10 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Logo)
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
             </th>
             <th></th>
         </tr>
@@ -34,11 +37,14 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                <img src="/Img/@item.Logo" alt="" height="50" title="@item.Logo" />
+                @Html.DisplayFor(modelItem => item.Image)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Düzenle</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Sil</a>
+                @Html.DisplayFor(modelItem => item.CreateDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Düzenle</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Sil</a>
             </td>
         </tr>
 }

@@ -1,16 +1,17 @@
-﻿@model Brand
+﻿@model Category
 
 @{
-    ViewData["Title"] = "Marka Ekle";
+    ViewData["Title"] = "Düzenle";
 }
 
-<h1>Marka Ekle</h1>
+<h1>Düzenle</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -22,23 +23,18 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Logo" class="control-label"></label>
-                <input asp-for="Logo" class="form-control" type="file" />
-                <span asp-validation-for="Logo" class="text-danger"></span>
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
-            <div class="form-group mt-3">
-                <input type="submit" value="Ekle" class="btn btn-primary" />
+            <div class="form-group">
+                <input type="submit" value="Kaydeet" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Listeye Dön</a>
+    <a asp-action="Index">Listeyi Düzenle</a>
 </div>
 
-<p>
-    Not: Resim yükleme için form elementine enctype="multipart/form-data" attribute ünü ekledik. 
-    <br />
-    Input Logo elementine type="file" attribute ünü ekledik. 
-</p>

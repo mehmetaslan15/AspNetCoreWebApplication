@@ -1,5 +1,6 @@
 ﻿using AspNetCoreWebApplication.Data;
 using AspNetCoreWebApplication.Entities;
+using AspNetCoreWebApplication.Tools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,7 @@ namespace AspNetCoreWebApplication.Areas.Admin.Controllers
         }
 
         // GET: BrandsController/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -37,10 +38,11 @@ namespace AspNetCoreWebApplication.Areas.Admin.Controllers
         // POST: BrandsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Brand brand)
+        public async Task<ActionResult> Create(Brand brand, IFormFile Logo)
         {
             try
             {
+                brand.Logo = await FileHelper.FileLoaderAsync(Logo);
                 await _context.Brands.AddAsync(brand);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -53,39 +55,57 @@ namespace AspNetCoreWebApplication.Areas.Admin.Controllers
         }
 
         // GET: BrandsController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var marka = await _context.Brands.FindAsync(id);
+            if (marka == null) return NotFound();  // Eğer gönderilen id ye ait bir marka veritabanında yoksa geriye NotFound(Bulunamadı) hatası dön. 
+            return View(marka);
         }
 
         // POST: BrandsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, Brand brand, IFormFile? Logo, bool resmiSil)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    if (resmiSil)  // if (resmiSil == true) demek ile aynı şey. Çünkü yukarıdan yani post metodundan true ya da false gelecek sadece 
+                    {
+                        FileHelper.FileRemover(brand.Logo);
+                        brand.Logo = string.Empty;
+                    }
+                    if (Logo != null) brand.Logo = await FileHelper.FileLoaderAsync(formFile: Logo);
+                    //_context.Brands.Update(brand);  // 1. güncelleme yöntemi
+                    _context.Entry(brand).State = EntityState.Modified; // 2. güncelleme yöntemi
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Hata Oluştu");
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(brand);
         }
 
         // GET: BrandsController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            return View();
+            return View(await _context.Brands.FindAsync(id));
         }
 
         // POST: BrandsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, Brand brand)
         {
             try
             {
+                //_context.Brands.Remove(brand);  // 1. silme yöntemi
+                _context.Entry(brand).State = EntityState.Deleted;  // 2 Silme yöntemi. 
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             catch

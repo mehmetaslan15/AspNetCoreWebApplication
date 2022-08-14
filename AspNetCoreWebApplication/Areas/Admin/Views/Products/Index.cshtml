@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Category>
+﻿@model IEnumerable<Product>
 
 @{
-    ViewData["Title"] = "Kategoriler";
+    ViewData["Title"] = "Ürünler";
 }
 
-<h1>Kategoriler</h1>
+<h1>Ürünler</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-outline-primary">Yeni Ekle</a>
@@ -16,13 +16,16 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Image)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)
             </th>
             <th></th>
         </tr>
@@ -35,15 +38,22 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @*<a href="@/Img/item.Image" target="_blank" title="Resmi Gör">*@
+                    <img src="/Img/@item.Image" alt="" height="40" title="@item.Image" />                    
+                    @*<a href="/Img/@item.Image">
                         <img src="/Img/@item.Image" alt="" height="40" />
-                    @*</a>*@
+                    </a>*@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand.Name)
+                    <a href="/Img/@item.Category.Image">
+                        <img src="/Img/@item.Category.Image" alt="" height="40" />
+                    </a>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Düzenle</a> |

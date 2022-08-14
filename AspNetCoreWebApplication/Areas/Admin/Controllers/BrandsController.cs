@@ -38,7 +38,7 @@ namespace AspNetCoreWebApplication.Areas.Admin.Controllers
         // POST: BrandsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Brand brand, IFormFile Logo)
+        public async Task<ActionResult> Create(Brand brand, IFormFile? Logo)
         {
             try
             {
